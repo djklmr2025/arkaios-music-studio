@@ -528,7 +528,8 @@ class SpatialStudioApp:
                 ]
             )
             self.current_project.add_event(new_ev)
-            self.selected_event_idx = len(self.current_project.events) - 1
+            # Localizar el índice real en la lista ordenada cronológicamente
+            self.selected_event_idx = self.current_project.events.index(new_ev)
             self.selected_node_idx = 0
             self.drawing_in_progress = True
             self._sync_inspector_to_event()
@@ -583,15 +584,31 @@ class SpatialStudioApp:
         # Si estamos arrastrando un nodo existente:
         if self.selected_node_idx is not None and ev.nodes and self.selected_node_idx < len(ev.nodes):
             nd = ev.nodes[self.selected_node_idx]
-            rel_t = np.clip(abs_t - ev.time_start, 0.0, ev.duration)
-            nd.t_offset = round(float(rel_t), 3)
-            nd.pitch = round(float(new_pitch), 2)
             
+            # Límites temporales estrictos para no cruzar nodos adyacentes ni invertir la trayectoria
             if self.selected_node_idx == 0:
+                min_t = 0.0
+                max_t = ev.nodes[1].t_offset - 0.02 if len(ev.nodes) > 1 else ev.duration
+                rel_t = np.clip(abs_t - ev.time_start, min_t, max_t)
+                nd.t_offset = round(float(rel_t), 3)
                 ev.pitch_start = round(float(new_pitch), 1)
             elif self.selected_node_idx == len(ev.nodes) - 1:
+                min_t = ev.nodes[-2].t_offset + 0.02 if len(ev.nodes) > 1 else 0.05
+                rel_t = max(min_t, abs_t - ev.time_start)
+                nd.t_offset = round(float(rel_t), 3)
+                ev.duration = round(float(rel_t), 3)
                 ev.pitch_end = round(float(new_pitch), 1)
+            else:
+                min_t = ev.nodes[self.selected_node_idx - 1].t_offset + 0.02
+                max_t = ev.nodes[self.selected_node_idx + 1].t_offset - 0.02
+                if min_t < max_t:
+                    rel_t = np.clip(abs_t - ev.time_start, min_t, max_t)
+                else:
+                    rel_t = min_t
+                nd.t_offset = round(float(rel_t), 3)
                 
+            nd.pitch = round(float(new_pitch), 2)
+            
             self._updating_inspector = True
             try:
                 self.scale_pitch.set(int(round(new_pitch)))
@@ -609,6 +626,11 @@ class SpatialStudioApp:
                 # Si fue solo un clic sin arrastre, añadir nodo final
                 ev.nodes.append(SpatialNode(t_offset=ev.duration, depth=3.0, pan=0.0, width=0.4, pitch=ev.pitch_start))
             ev.nodes.sort(key=lambda n: n.t_offset)
+            # Desduplicar cualquier t_offset que haya quedado idéntico
+            for i in range(1, len(ev.nodes)):
+                if ev.nodes[i].t_offset <= ev.nodes[i - 1].t_offset:
+                    ev.nodes[i].t_offset = round(ev.nodes[i - 1].t_offset + 0.02, 3)
+            ev.duration = max(ev.duration, ev.nodes[-1].t_offset)
             self.selected_node_idx = len(ev.nodes) - 1
             self._sync_inspector_to_event()
             self.draw_scene()
@@ -636,7 +658,7 @@ class SpatialStudioApp:
             ]
         )
         self.current_project.add_event(ev)
-        self.selected_event_idx = len(self.current_project.events) - 1
+        self.selected_event_idx = self.current_project.events.index(ev)
         self.selected_node_idx = 0
         self._sync_inspector_to_event()
         self.draw_scene()

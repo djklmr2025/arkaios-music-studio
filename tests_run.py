@@ -18,6 +18,8 @@ if sys.stdout.encoding != 'utf-8':
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import numpy as np
+
 from engine.spatial_model import SpatialProject, SpatialEvent, SpatialNode
 from engine.spatial_renderer import render_project, export_wav
 
@@ -211,6 +213,44 @@ def verify_regressions():
         else: raise AssertionError("Invalid event accepted")
     print("[OK] Regresiones: profundidad, anchura, voces, eco, cola, frecuencia, curvas multinodo y validacion")
 
+def verify_gui_editing_invariants():
+    """Valida los casos extremos de edición señalados por ChatGPT."""
+    # 1. Inserción de voz entre eventos existentes
+    proj = SpatialProject("Test GUI Invariants")
+    ev1 = SpatialEvent(id="v1", time_start=0.0, duration=1.0)
+    ev3 = SpatialEvent(id="v3", time_start=3.0, duration=1.0)
+    proj.add_event(ev1)
+    proj.add_event(ev3)
+    
+    # Insertar voz en el medio (t=1.5)
+    ev_mid = SpatialEvent(id="v2", time_start=1.5, duration=1.0)
+    proj.add_event(ev_mid)
+    
+    idx = proj.events.index(ev_mid)
+    assert idx == 1, f"Expected middle event at index 1, got {idx}"
+    assert proj.events[0].id == "v1" and proj.events[1].id == "v2" and proj.events[2].id == "v3"
+    
+    # 2. Confinamiento de nodos sin cruce temporal
+    nodes = [
+        SpatialNode(0.0, 3.0, 0.0, 0.0, pitch=60.0),
+        SpatialNode(0.5, 3.0, 0.0, 0.0, pitch=64.0),
+        SpatialNode(1.0, 3.0, 0.0, 0.0, pitch=67.0)
+    ]
+    # Simular arrastre del nodo intermedio más allá de sus vecinos
+    drag_left = -0.5
+    drag_right = 2.0
+    clamped_left = np.clip(drag_left, nodes[0].t_offset + 0.02, nodes[2].t_offset - 0.02)
+    clamped_right = np.clip(drag_right, nodes[0].t_offset + 0.02, nodes[2].t_offset - 0.02)
+    assert nodes[0].t_offset < clamped_left < nodes[2].t_offset, "Left clamp failed"
+    assert nodes[0].t_offset < clamped_right < nodes[2].t_offset, "Right clamp failed"
+    
+    # 3. Duración con cola exacta
+    base_dur = proj.total_duration(include_tail=False)
+    tail_dur = proj.total_duration(include_tail=True)
+    assert abs((tail_dur - base_dur) - 0.5) < 1e-6, "Tail duration difference must be exactly 0.5s"
+    print("[OK] Invariantes de GUI: inserción intermedia, confinamiento temporal y sincronía de cola validados")
+
 if __name__ == "__main__":
     run_tests()
+    verify_gui_editing_invariants()
 

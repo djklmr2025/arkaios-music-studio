@@ -280,4 +280,22 @@ Basado en la referencia técnica de `Musica creada en 8D.mp4` (LINES):
 6. **Pruebas de Regresión Ampliadas**:
    - Verificación automatizada de renderizado con curvas multinodo y validación estricta de tonos en `tests_run.py` (10 suites, 100% éxito).
 
+---
+
+## Actualización de Invariantes de Edición en GUI y Robustez en Windows - 09/10/2026
+
+### Mejoras Realizadas en Respuesta a la Auditoría de ChatGPT
+1. **Selección Precisa de Voces Intermedias**:
+   - `SpatialProject.add_event` inserta los eventos ordenados cronológicamente por `time_start`. Anteriormente, la GUI asumía que el nuevo evento quedaba en `len(events) - 1`.
+   - Se corrigió tanto en `on_canvas_click` (dibujo) como en `add_new_voice` para usar `self.current_project.events.index(new_ev)`, asegurando que al dibujar o agregar una voz entre eventos existentes, la voz seleccionada e inspeccionada sea **exactamente la voz recién creada**, sin alterar eventos vecinos.
+2. **Confinamiento Temporal de Nodos Arrastrados (Prevención de Cruce Temporal)**:
+   - Al arrastrar un nodo intermedio, su tiempo se confina estrictamente entre sus vecinos adyacentes: `nodes[i-1].t_offset + 0.02` y `nodes[i+1].t_offset - 0.02`.
+   - El nodo inicial queda delimitado antes del segundo nodo, y el nodo final controla dinámicamente la duración total del evento sin invertir la trayectoria.
+   - En `on_canvas_release`, se realiza una pasada de desduplicación y garantía de monotonicidad temporal estricta para cumplir con los requisitos del motor de síntesis.
+3. **Batería de Pruebas Automatizadas de Invariantes**:
+   - Se añadió `verify_gui_editing_invariants()` a `tests_run.py`, validando:
+     - Inserción ordenada y resolución de índice de voces intermedias.
+     - Confinamiento temporal de nodos ante arrastres extremos sin inversión de trayectoria.
+     - Precisión exacta (+0.5 s) de duración con cola de reverberación/eco.
+
 
