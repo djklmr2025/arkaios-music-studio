@@ -361,7 +361,7 @@ class SpatialStudioApp:
         )
         if out_path:
             audio_data, metrics = render_project(self.current_project)
-            export_wav(out_path, audio_data)
+            export_wav(out_path, audio_data, metrics["sample_rate"])
             self._update_metrics_display()
             messagebox.showinfo("Exportación Completada", f"Archivo WAV exportado exitosamente:\n\n{out_path}\n\nPeak: {metrics['peak_dbfs']} dBFS\nRMS: {metrics['rms_dbfs']} dBFS")
 
