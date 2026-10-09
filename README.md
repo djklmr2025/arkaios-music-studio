@@ -252,7 +252,32 @@ Basado en la referencia técnica de `Musica creada en 8D.mp4` (LINES):
 
 ### Pruebas Realizadas
 - [x] Ejecución de `tests_run.py` (100% de regresiones y pruebas de ingeniería superadas).
-- [x] Generación y renderizado de `lines_8d_masterpiece.wav` (29.0s, Peak -0.72 dBFS, RMS -16.11 dBFS, 0 NaNs).
+- [x] Generación y renderizado de `lines_8d_masterpiece.wav` (29.0s, Peak -2.24 dBFS, RMS -16.62 dBFS, 0 NaNs).
 - [x] Validación de la GUI: adición de voces, eliminación, dibujo, selección, reproducción con playhead y exportación WAV.
+
+---
+
+## Actualización de Curvas Multinodo, Atenuación 1/d y Edición No Destructiva - 09/10/2026
+
+### Qué se implementó y publicó
+1. **Afinación Independiente por Nodo (Glissando Multipunto Arbitrario)**:
+   - `SpatialNode` ahora soporta el atributo opcional `pitch` (0-127).
+   - `render_spatial_event` interpola continuamente las frecuencias en el tiempo (`np.interp(t, node_times, node_pitches)`), permitiendo trayectorias tonales microtonales y curvas complejas dentro de un mismo evento continuo.
+2. **Sincronización Total del Transporte y Colas de Eco**:
+   - `SpatialProject.total_duration(include_tail=True)` incluye la cola acústica de reverberación/eco (+0.5 s).
+   - El bucle de animación a 30 FPS del cursor (`_animate_playhead`) y la línea de tiempo de la GUI usan esta duración exacta, evitando que la animación termine antes de que expire la cola sonora.
+3. **Atenuación Física por Ley Inversa de Distancia $1/d$**:
+   - Se formalizó la atenuación geométrica en `engine/spatial_renderer.py` calculando $d = 1.5 - 0.5 \cdot z$ ($d_{ref}=1.0$ al frente en Plano 5, $d_{far}=1.5$ al fondo en Plano 1), con factor de amplitud proporcional a $1/d$, combinado con la absorción en altas frecuencias por distancia.
+4. **Protección de Inspector y Edición No Destructiva**:
+   - Se incorporó la bandera `_updating_inspector` para evitar que la selección de una voz dispare eventos de deslizadores que aplanen las notas.
+   - El cambio de tono en el inspector aplica un desplazamiento diferencial (`delta`) que preserva la pendiente de los glissandos en lugar de sobrescribir el inicio y el final con el mismo valor.
+5. **Atajos de Teclado y Flujo de LINES**:
+   - **Tecla `D`**: Alternar entre herramienta de selección (`Select`) y lápiz continuo (`Draw`).
+   - **Tecla `S`**: Seleccionar herramienta de cursor.
+   - **Doble Clic**: Insertar un punto de control de curvatura (*bend point*) en la posición exacta del evento.
+   - **Flechas `<Up>` / `<Down>`**: Transponer el nodo o evento seleccionado por semitonos individuales; `<Shift-Up>` / `<Shift-Down>` transpone por octavas completas (12 semitonos).
+   - **Dibujo Continuo (*Freehand Pencil*)**: En modo `Draw`, arrastrar el ratón genera múltiples nodos a lo largo de la trayectoria.
+6. **Pruebas de Regresión Ampliadas**:
+   - Verificación automatizada de renderizado con curvas multinodo y validación estricta de tonos en `tests_run.py` (10 suites, 100% éxito).
 
 

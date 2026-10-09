@@ -195,13 +195,21 @@ def verify_regressions():
     tone = render_spatial_event(SpatialEvent(pitch_start=69,pitch_end=69),sr=48000)[0]
     freq = np.fft.rfftfreq(len(tone),1/48000)[np.argmax(abs(np.fft.rfft(tone)))]
     assert abs(freq-440) <= 1, "Sample rate must preserve pitch"
+    ev_multi = SpatialEvent(duration=1.0, nodes=[
+        SpatialNode(0.0, 3.0, 0.0, 0.0, pitch=60.0),
+        SpatialNode(0.5, 3.0, 0.0, 0.0, pitch=72.0),
+        SpatialNode(1.0, 3.0, 0.0, 0.0, pitch=60.0)
+    ])
+    audio_multi = render_spatial_event(ev_multi, sr=44100)[0]
+    assert np.isfinite(audio_multi).all() and len(audio_multi) == 44100, "Multi-node pitch render failed"
     for invalid in (SpatialEvent(duration=-1), SpatialEvent(nodes=[SpatialNode(depth=99)]),
                     SpatialEvent(volume=float('nan')),
-                    SpatialEvent(nodes=[SpatialNode(.5),SpatialNode(.1)])):
+                    SpatialEvent(nodes=[SpatialNode(.5),SpatialNode(.1)]),
+                    SpatialEvent(nodes=[SpatialNode(0,3,0,0,pitch=-5)])):
         try: render_spatial_event(invalid)
         except ValueError: pass
         else: raise AssertionError("Invalid event accepted")
-    print("[OK] Regresiones: profundidad, anchura, voces, eco, cola, frecuencia y validacion")
+    print("[OK] Regresiones: profundidad, anchura, voces, eco, cola, frecuencia, curvas multinodo y validacion")
 
 if __name__ == "__main__":
     run_tests()

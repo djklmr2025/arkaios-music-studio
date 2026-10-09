@@ -8,20 +8,24 @@ import json
 import os
 
 class SpatialNode:
-    """Nodo temporal que marca un instante de cambio en la trayectoria espacial."""
-    def __init__(self, t_offset=0.0, depth=3.0, pan=0.0, width=0.0):
+    """Nodo temporal que marca un instante de cambio en la trayectoria espacial y tonal."""
+    def __init__(self, t_offset=0.0, depth=3.0, pan=0.0, width=0.0, pitch=None):
         self.t_offset = float(t_offset)      # Tiempo relativo dentro del evento (s)
         self.depth = float(depth)            # Plano 1 (fondo) a 5 (frente)
         self.pan = float(pan)                # -1.0 (izq) a +1.0 (der)
         self.width = float(width)            # 0.0 (puntual) a 1.0 (máxima apertura)
+        self.pitch = float(pitch) if pitch is not None else None  # Afinación MIDI en este nodo
 
     def to_dict(self):
-        return {
+        d = {
             "t_offset": round(self.t_offset, 4),
             "depth": round(self.depth, 2),
             "pan": round(self.pan, 2),
             "width": round(self.width, 2)
         }
+        if self.pitch is not None:
+            d["pitch"] = round(self.pitch, 2)
+        return d
 
     @classmethod
     def from_dict(cls, data):
@@ -29,7 +33,8 @@ class SpatialNode:
             t_offset=data.get("t_offset", 0.0),
             depth=data.get("depth", 3.0),
             pan=data.get("pan", 0.0),
-            width=data.get("width", 0.0)
+            width=data.get("width", 0.0),
+            pitch=data.get("pitch", None)
         )
 
 class SpatialEvent:
@@ -129,10 +134,11 @@ class SpatialProject:
         self.events.append(event)
         self.events.sort(key=lambda e: e.time_start)
 
-    def total_duration(self):
+    def total_duration(self, include_tail=False):
         if not self.events:
             return 0.0
-        return max(e.time_start + e.duration for e in self.events)
+        base = max(e.time_start + e.duration for e in self.events)
+        return base + 0.5 if include_tail else base
 
     def to_dict(self):
         return {

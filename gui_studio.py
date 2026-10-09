@@ -55,6 +55,8 @@ class SpatialStudioApp:
         
         # Modo de herramienta: 'select' o 'draw'
         self.tool_mode = "select"
+        self._updating_inspector = False
+        self.drawing_in_progress = False
         
         # Estado de transporte
         self.is_playing = False
@@ -78,6 +80,7 @@ class SpatialStudioApp:
         
         self._setup_styles()
         self._build_ui()
+        self._bind_shortcuts()
         
         # Cargar preset por defecto: Masterpiece 8D si existe, o Prueba 2
         masterpiece_file = os.path.join(PROJECTS_DIR, "lines_8d_masterpiece.json")
@@ -158,6 +161,7 @@ class SpatialStudioApp:
         self.timeline_canvas.bind("<Button-1>", self.on_canvas_click)
         self.timeline_canvas.bind("<B1-Motion>", self.on_canvas_drag)
         self.timeline_canvas.bind("<ButtonRelease-1>", self.on_canvas_release)
+        self.timeline_canvas.bind("<Double-Button-1>", self.on_canvas_double_click)
         
         # Inspector Derecho (Parámetros Espaciales de la Voz Seleccionada)
         inspector_frame = tk.Frame(main_paned, bg="#121024", width=340, padx=12, pady=8)
@@ -250,6 +254,24 @@ class SpatialStudioApp:
             self.btn_select_tool.config(bg="#181530", fg="#d8d6f5")
             self.btn_draw_tool.config(bg="#2b2854", fg="#ff3df0")
             self.status_lbl.config(text="Modo: Dibujar nuevas líneas (Haz clic y arrastra en el lienzo)")
+
+    def _bind_shortcuts(self):
+        # Atajos estándar de LINES (Juan Pestana Guide 1.2)
+        self.root.bind("<d>", lambda e: self.set_tool_mode("draw" if self.tool_mode == "select" else "select"))
+        self.root.bind("<D>", lambda e: self.set_tool_mode("draw" if self.tool_mode == "select" else "select"))
+        self.root.bind("<s>", lambda e: self.set_tool_mode("select"))
+        self.root.bind("<S>", lambda e: self.set_tool_mode("select"))
+        self.root.bind("<Up>", lambda e: self.transpose_selection(1))
+        self.root.bind("<Down>", lambda e: self.transpose_selection(-1))
+        self.root.bind("<Shift-Up>", lambda e: self.transpose_selection(12))
+        self.root.bind("<Shift-Down>", lambda e: self.transpose_selection(-12))
+        self.root.bind("<space>", lambda e: self.toggle_play())
+
+    def toggle_play(self):
+        if self.is_playing:
+            self.stop_audio()
+        else:
+            self.play_audio()
 
     def toggle_loop(self):
         self.is_looping = not self.is_looping
@@ -416,20 +438,59 @@ class SpatialStudioApp:
         self.timeline_canvas.create_polygon([px_head - 6, 0, px_head + 6, 0, px_head, 10], fill="#ffe066", outline="")
 
     def _get_active_pitches_at(self, t_sec):
-        """Retorna las notas que están sonando activamente en el instante t."""
+        """Retorna las notas que están sonando activamente en el instante t (con soporte multipunto)."""
         if not self.current_project:
             return []
         active = []
         for ev in self.current_project.events:
             if ev.time_start <= t_sec <= (ev.time_start + ev.duration):
-                rel_t = (t_sec - ev.time_start) / max(0.001, ev.duration)
-                pitch = ev.pitch_start + (ev.pitch_end - ev.pitch_start) * rel_t
+                if ev.nodes and any(getattr(n, 'pitch', None) is not None for n in ev.nodes):
+                    node_times = [n.t_offset for n in ev.nodes]
+                    node_pitches = [n.pitch if (hasattr(n, 'pitch') and n.pitch is not None) else (ev.pitch_start + (ev.pitch_end - ev.pitch_start) * (n.t_offset / max(1e-6, ev.duration))) for n in ev.nodes]
+                    t_in_ev = t_sec - ev.time_start
+                    pitch = float(np.interp(t_in_ev, node_times, node_pitches))
+                else:
+                    rel_t = (t_sec - ev.time_start) / max(0.001, ev.duration)
+                    pitch = ev.pitch_start + (ev.pitch_end - ev.pitch_start) * rel_t
                 active.append(pitch)
         return active
 
     # -------------------------------------------------------------
-    # INTERACCIÓN CON EL CANVAS (SELECCIÓN Y ARRASTRE DE NODOS)
+    # INTERACCIÓN CON EL CANVAS (SELECCIÓN, BEND POINTS Y DIBUJO CONTINUO)
     # -------------------------------------------------------------
+    def on_canvas_double_click(self, event):
+        """Añade un punto de control (Bend point) en la posición del doble clic (estilo LINES)."""
+        if not self.current_project or not self.current_project.events:
+            return
+        w = self.timeline_canvas.winfo_width()
+        h = self.timeline_canvas.winfo_height()
+        if w < 10 or h < 10:
+            return
+
+        total_semitones = self.max_midi - self.min_midi
+        clicked_midi = self.min_midi + (1.0 - (np.clip(event.y, 0, h) / h)) * total_semitones
+        clicked_t = (np.clip(event.x, 0, w) / w) * self.total_duration_sec
+
+        # Buscar el evento más cercano o el seleccionado
+        ev = self.current_project.events[self.selected_event_idx]
+        if not (ev.time_start <= clicked_t <= ev.time_start + ev.duration):
+            for i, other in enumerate(self.current_project.events):
+                if other.time_start <= clicked_t <= other.time_start + other.duration:
+                    self.selected_event_idx = i
+                    ev = other
+                    break
+
+        rel_t = max(0.01, min(ev.duration - 0.01, clicked_t - ev.time_start))
+        # Determinar profundidad interpolada
+        z_approx = ev.nodes[0].depth if ev.nodes else 3.0
+        new_node = SpatialNode(t_offset=round(rel_t, 3), depth=z_approx, pan=0.0, width=0.4, pitch=round(clicked_midi, 2))
+        ev.nodes.append(new_node)
+        ev.nodes.sort(key=lambda n: n.t_offset)
+        self.selected_node_idx = ev.nodes.index(new_node)
+        self._sync_inspector_to_event()
+        self.draw_scene()
+        self.status_lbl.config(text=f"Añadido punto de curvatura (Bend) en t={rel_t:.2f}s, {midi_to_note_name(clicked_midi)}")
+
     def on_canvas_click(self, event):
         w = self.timeline_canvas.winfo_width()
         h = self.timeline_canvas.winfo_height()
@@ -445,78 +506,116 @@ class SpatialStudioApp:
                 self.draw_scene()
                 return
 
-        # 2. Si no es nodo, buscar si se hizo clic cerca de una línea para seleccionarla
-        # O en modo Draw: crear una nueva nota/línea
+        # 2. Si es modo Draw (Lápiz libre / continuo)
         if self.tool_mode == "draw":
             total_semitones = self.max_midi - self.min_midi
             clicked_midi = self.min_midi + (1.0 - (event.y / h)) * total_semitones
             clicked_t = (event.x / w) * self.total_duration_sec
             
+            # Crear nueva voz y registrar inicio del trazo
+            idx = len(self.current_project.events) + 1
             new_ev = SpatialEvent(
-                id=f"voice_{len(self.current_project.events) + 1}",
-                name=f"Voz {len(self.current_project.events) + 1}",
+                id=f"voice_{idx}",
+                name=f"Voz {idx}",
                 time_start=round(max(0.0, clicked_t), 2),
-                duration=2.0,
+                duration=1.5,
                 pitch_start=round(clicked_midi, 1),
                 pitch_end=round(clicked_midi, 1),
-                volume=0.75,
+                volume=0.60,
                 waveform="warm_saw",
                 nodes=[
-                    SpatialNode(0.0, depth=3.0, pan=0.0, width=0.4),
-                    SpatialNode(2.0, depth=3.0, pan=0.0, width=0.4)
+                    SpatialNode(0.0, depth=3.0, pan=0.0, width=0.4, pitch=round(clicked_midi, 2))
                 ]
             )
             self.current_project.add_event(new_ev)
             self.selected_event_idx = len(self.current_project.events) - 1
             self.selected_node_idx = 0
+            self.drawing_in_progress = True
             self._sync_inspector_to_event()
             self.draw_scene()
-            self.status_lbl.config(text=f"Creada nueva voz en {midi_to_note_name(clicked_midi)}")
+            self.status_lbl.config(text=f"Dibujando trazo libre desde {midi_to_note_name(clicked_midi)}...")
         else:
-            # En modo select, mover el playhead al punto cliqueado
-            t_click = (event.x / w) * self.total_duration_sec
-            self.playhead_pos_sec = max(0.0, min(self.total_duration_sec, t_click))
-            self.draw_scene()
+            # En modo select, buscar si hizo clic en una línea para seleccionarla
+            total_semitones = self.max_midi - self.min_midi
+            clicked_midi = self.min_midi + (1.0 - (event.y / h)) * total_semitones
+            clicked_t = (event.x / w) * self.total_duration_sec
+            found = False
+            for i, ev in enumerate(self.current_project.events):
+                if ev.time_start <= clicked_t <= ev.time_start + ev.duration:
+                    if abs(ev.pitch_start - clicked_midi) <= 3.0 or abs(ev.pitch_end - clicked_midi) <= 3.0:
+                        self.selected_event_idx = i
+                        self.selected_node_idx = None
+                        self._sync_inspector_to_event()
+                        self.draw_scene()
+                        found = True
+                        break
+            if not found:
+                # Mover el playhead al punto cliqueado
+                self.playhead_pos_sec = max(0.0, min(self.total_duration_sec, clicked_t))
+                self.selected_node_idx = None
+                self.draw_scene()
 
     def on_canvas_drag(self, event):
-        if self.selected_node_idx is None or self.current_project is None:
-            return
-        if self.selected_event_idx >= len(self.current_project.events):
+        if not self.current_project or self.selected_event_idx >= len(self.current_project.events):
             return
 
         w = self.timeline_canvas.winfo_width()
         h = self.timeline_canvas.winfo_height()
         total_semitones = self.max_midi - self.min_midi
-
-        # Mapear Y a Tono MIDI
         y_clamped = np.clip(event.y, 0, h)
         new_pitch = self.min_midi + (1.0 - (y_clamped / h)) * total_semitones
-
+        x_clamped = np.clip(event.x, 0, w)
+        abs_t = (x_clamped / w) * self.total_duration_sec
         ev = self.current_project.events[self.selected_event_idx]
-        if ev.nodes and self.selected_node_idx < len(ev.nodes):
+
+        # Si estamos en modo de dibujo continuo con el lápiz:
+        if self.drawing_in_progress:
+            rel_t = max(0.02, abs_t - ev.time_start)
+            # Agregar nodo si avanzó en el tiempo
+            last_t = ev.nodes[-1].t_offset if ev.nodes else 0.0
+            if rel_t > last_t + 0.05:
+                ev.nodes.append(SpatialNode(t_offset=round(rel_t, 3), depth=3.0, pan=0.0, width=0.4, pitch=round(new_pitch, 2)))
+                ev.duration = max(ev.duration, round(rel_t + 0.05, 3))
+                ev.pitch_end = round(new_pitch, 1)
+            self.draw_scene()
+            return
+
+        # Si estamos arrastrando un nodo existente:
+        if self.selected_node_idx is not None and ev.nodes and self.selected_node_idx < len(ev.nodes):
             nd = ev.nodes[self.selected_node_idx]
-            # Mapear X a tiempo relativo del nodo
-            x_clamped = np.clip(event.x, 0, w)
-            abs_t = (x_clamped / w) * self.total_duration_sec
             rel_t = np.clip(abs_t - ev.time_start, 0.0, ev.duration)
-            nd.t_offset = round(float(rel_t), 2)
+            nd.t_offset = round(float(rel_t), 3)
+            nd.pitch = round(float(new_pitch), 2)
             
-            # Si es el primer nodo o el último, actualizar pitch_start / pitch_end
             if self.selected_node_idx == 0:
                 ev.pitch_start = round(float(new_pitch), 1)
             elif self.selected_node_idx == len(ev.nodes) - 1:
                 ev.pitch_end = round(float(new_pitch), 1)
                 
-            self.scale_pitch.set(int(round(new_pitch)))
-            self.lbl_pitch.config(text=f"Tono MIDI: {int(round(new_pitch))} ({midi_to_note_name(new_pitch)})")
+            self._updating_inspector = True
+            try:
+                self.scale_pitch.set(int(round(new_pitch)))
+                self.lbl_pitch.config(text=f"Tono MIDI: {int(round(new_pitch))} ({midi_to_note_name(new_pitch)})")
+            finally:
+                self._updating_inspector = False
 
         self.draw_scene()
 
     def on_canvas_release(self, event):
-        pass
+        if self.drawing_in_progress:
+            self.drawing_in_progress = False
+            ev = self.current_project.events[self.selected_event_idx]
+            if len(ev.nodes) == 1:
+                # Si fue solo un clic sin arrastre, añadir nodo final
+                ev.nodes.append(SpatialNode(t_offset=ev.duration, depth=3.0, pan=0.0, width=0.4, pitch=ev.pitch_start))
+            ev.nodes.sort(key=lambda n: n.t_offset)
+            self.selected_node_idx = len(ev.nodes) - 1
+            self._sync_inspector_to_event()
+            self.draw_scene()
+            self.status_lbl.config(text=f"Trazo completado ({len(ev.nodes)} nodos).")
 
     # -------------------------------------------------------------
-    # GESTIÓN DE VOCES Y PARÁMETROS
+    # GESTIÓN DE VOCES Y PARÁMETROS (INSPECTOR SEGURO)
     # -------------------------------------------------------------
     def add_new_voice(self):
         if not self.current_project:
@@ -529,11 +628,11 @@ class SpatialStudioApp:
             duration=3.0,
             pitch_start=60.0,
             pitch_end=64.0,
-            volume=0.70,
+            volume=0.50,
             waveform="warm_saw",
             nodes=[
-                SpatialNode(0.0, depth=3.0, pan=0.0, width=0.5),
-                SpatialNode(3.0, depth=4.0, pan=0.0, width=0.5)
+                SpatialNode(0.0, depth=3.0, pan=0.0, width=0.5, pitch=60.0),
+                SpatialNode(3.0, depth=4.0, pan=0.0, width=0.5, pitch=64.0)
             ]
         )
         self.current_project.add_event(ev)
@@ -557,38 +656,96 @@ class SpatialStudioApp:
         self.status_lbl.config(text="Voz eliminada.")
 
     def _sync_inspector_to_event(self):
+        """Sincroniza los controles sin disparar callbacks que aplanen curvas."""
         if not self.current_project or not self.current_project.events:
             return
         if self.selected_event_idx >= len(self.current_project.events):
             self.selected_event_idx = 0
 
-        ev = self.current_project.events[self.selected_event_idx]
-        self.lbl_voice_info.config(text=f"Voz: {ev.name} ({self.selected_event_idx + 1}/{len(self.current_project.events)})")
-        self.scale_pitch.set(int(round(ev.pitch_start)))
-        self.lbl_pitch.config(text=f"Tono MIDI: {int(round(ev.pitch_start))} ({midi_to_note_name(ev.pitch_start)})")
-        self.scale_volume.set(ev.volume)
-        self.lbl_volume.config(text=f"Volumen: {ev.volume:.2f}")
-        
-        # Depth
-        z_val = ev.nodes[0].depth if ev.nodes else 3.0
-        self.scale_depth.set(z_val)
-        self.lbl_depth.config(text=f"Plano Z: {z_val:.1f}")
-        
-        self.width_mode_var.set(ev.width_mode)
-        self.waveform_var.set(ev.waveform)
-        self.echo_var.set(ev.echo_enabled)
+        self._updating_inspector = True
+        try:
+            ev = self.current_project.events[self.selected_event_idx]
+            self.lbl_voice_info.config(text=f"Voz: {ev.name} ({self.selected_event_idx + 1}/{len(self.current_project.events)})")
+            
+            # Tono del nodo seleccionado o tono de inicio
+            if self.selected_node_idx is not None and ev.nodes and self.selected_node_idx < len(ev.nodes):
+                curr_p = getattr(ev.nodes[self.selected_node_idx], 'pitch', None)
+                if curr_p is None:
+                    curr_p = ev.pitch_start
+            else:
+                curr_p = ev.pitch_start
+
+            self.scale_pitch.set(int(round(curr_p)))
+            self.lbl_pitch.config(text=f"Tono MIDI: {int(round(curr_p))} ({midi_to_note_name(curr_p)})")
+            self.scale_volume.set(ev.volume)
+            self.lbl_volume.config(text=f"Volumen: {ev.volume:.2f}")
+            
+            # Profundidad Z
+            if self.selected_node_idx is not None and ev.nodes and self.selected_node_idx < len(ev.nodes):
+                z_val = ev.nodes[self.selected_node_idx].depth
+            else:
+                z_val = ev.nodes[0].depth if ev.nodes else 3.0
+            self.scale_depth.set(z_val)
+            self.lbl_depth.config(text=f"Plano Z: {z_val:.1f}")
+            
+            self.width_mode_var.set(ev.width_mode)
+            self.waveform_var.set(ev.waveform)
+            self.echo_var.set(ev.echo_enabled)
+        finally:
+            self._updating_inspector = False
+
+    def transpose_selection(self, semitones):
+        """Transpone de manera no destructiva conservando curvas de glissando."""
+        if not self.current_project or not self.current_project.events:
+            return
+        if self.selected_event_idx < len(self.current_project.events):
+            ev = self.current_project.events[self.selected_event_idx]
+            if self.selected_node_idx is not None and ev.nodes and self.selected_node_idx < len(ev.nodes):
+                nd = ev.nodes[self.selected_node_idx]
+                curr = nd.pitch if getattr(nd, 'pitch', None) is not None else ev.pitch_start
+                nd.pitch = float(np.clip(curr + semitones, self.min_midi, self.max_midi))
+                if self.selected_node_idx == 0:
+                    ev.pitch_start = nd.pitch
+                elif self.selected_node_idx == len(ev.nodes) - 1:
+                    ev.pitch_end = nd.pitch
+            else:
+                ev.pitch_start = float(np.clip(ev.pitch_start + semitones, self.min_midi, self.max_midi))
+                ev.pitch_end = float(np.clip(ev.pitch_end + semitones, self.min_midi, self.max_midi))
+                for nd in ev.nodes:
+                    if getattr(nd, 'pitch', None) is not None:
+                        nd.pitch = float(np.clip(nd.pitch + semitones, self.min_midi, self.max_midi))
+            self._sync_inspector_to_event()
+            self.draw_scene()
+            self.status_lbl.config(text=f"Transposición: {'+' if semitones > 0 else ''}{semitones} st")
 
     def on_pitch_change(self, val):
+        if self._updating_inspector:
+            return
         if self.current_project and self.current_project.events:
             if self.selected_event_idx < len(self.current_project.events):
                 p = float(val)
                 ev = self.current_project.events[self.selected_event_idx]
-                ev.pitch_start = p
-                ev.pitch_end = p
+                if self.selected_node_idx is not None and ev.nodes and self.selected_node_idx < len(ev.nodes):
+                    # Actualizar solo este nodo sin aplanar el resto
+                    ev.nodes[self.selected_node_idx].pitch = p
+                    if self.selected_node_idx == 0:
+                        ev.pitch_start = p
+                    elif self.selected_node_idx == len(ev.nodes) - 1:
+                        ev.pitch_end = p
+                else:
+                    # Transponer toda la voz uniformemente
+                    delta = p - ev.pitch_start
+                    ev.pitch_start = p
+                    ev.pitch_end += delta
+                    for nd in ev.nodes:
+                        if getattr(nd, 'pitch', None) is not None:
+                            nd.pitch += delta
                 self.lbl_pitch.config(text=f"Tono MIDI: {int(p)} ({midi_to_note_name(p)})")
                 self.draw_scene()
 
     def on_volume_change(self, val):
+        if self._updating_inspector:
+            return
         if self.current_project and self.current_project.events:
             if self.selected_event_idx < len(self.current_project.events):
                 v = float(val)
@@ -597,12 +754,19 @@ class SpatialStudioApp:
                 self.draw_scene()
 
     def on_depth_change(self, val):
+        if self._updating_inspector:
+            return
         if self.current_project and self.current_project.events:
             if self.selected_event_idx < len(self.current_project.events):
                 z = float(val)
                 ev = self.current_project.events[self.selected_event_idx]
-                for nd in ev.nodes:
-                    nd.depth = z
+                if self.selected_node_idx is not None and ev.nodes and self.selected_node_idx < len(ev.nodes):
+                    ev.nodes[self.selected_node_idx].depth = z
+                else:
+                    old_z = ev.nodes[0].depth if ev.nodes else 3.0
+                    delta = z - old_z
+                    for nd in ev.nodes:
+                        nd.depth = float(np.clip(nd.depth + delta, 1.0, 5.0))
                 self.lbl_depth.config(text=f"Plano Z: {z:.1f}")
                 self.draw_scene()
 
@@ -653,7 +817,7 @@ class SpatialStudioApp:
             return
             
         elapsed = time.time() - self.play_start_time
-        total_dur = self.current_project.total_duration() if self.current_project else 10.0
+        total_dur = self.current_project.total_duration(include_tail=True) if self.current_project else 10.0
         
         if elapsed >= total_dur:
             if self.is_looping:
@@ -697,6 +861,7 @@ class SpatialStudioApp:
                 
         if os.path.exists(json_file):
             self.current_project = SpatialProject.load_json(json_file)
+            self.total_duration_sec = max(1.0, self.current_project.total_duration(include_tail=True))
             self.selected_event_idx = 0
             self.selected_node_idx = 0
             self.preset_combo.set(preset_name)
@@ -709,7 +874,7 @@ class SpatialStudioApp:
         if not self.current_project:
             return
         if metrics is None:
-            dur = self.current_project.total_duration()
+            dur = self.current_project.total_duration(include_tail=True)
             text = (f"Peak: - dBFS | RMS: - dBFS\n"
                     f"Duración: {dur:.1f} s | Voces: {len(self.current_project.events)}")
         else:
@@ -738,6 +903,7 @@ class SpatialStudioApp:
         )
         if path and os.path.exists(path):
             self.current_project = SpatialProject.load_json(path)
+            self.total_duration_sec = max(1.0, self.current_project.total_duration(include_tail=True))
             self.selected_event_idx = 0
             self.selected_node_idx = 0
             self._sync_inspector_to_event()

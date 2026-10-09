@@ -21,14 +21,14 @@ def build_lines_8d_masterpiece():
     # -------------------------------------------------------------
     pad_voices = [
         # (id, name, start_pitch, mid_pitch, end_pitch, depth, pan, width_mode, waveform, vol)
-        ("bass", "Voz 1 - Sub Bass", 36.0, 38.0, 48.0, 1.5, 0.0, "single_source_width", "warm_saw", 0.75),
-        ("low", "Voz 2 - Low Harmony", 43.0, 45.0, 48.0, 2.0, -0.2, "single_source_width", "warm_saw", 0.65),
-        ("tenor", "Voz 3 - Tenor Pad", 48.0, 52.0, 60.0, 2.5, -0.4, "single_source_width", "flute", 0.60),
-        ("mid", "Voz 4 - Mid Pad", 55.0, 57.0, 60.0, 3.0, +0.4, "single_source_width", "flute", 0.60),
-        ("alto", "Voz 5 - Alto Voice", 59.0, 62.0, 60.0, 3.5, -0.6, "dual_source_split", "warm_saw", 0.55),
-        ("lead", "Voz 6 - Lush Lead", 64.0, 65.0, 60.0, 4.0, +0.6, "dual_source_split", "warm_saw", 0.55),
-        ("shimmer", "Voz 7 - Shimmer Air", 67.0, 71.0, 72.0, 4.5, -0.7, "dual_source_split", "triangle", 0.50),
-        ("top", "Voz 8 - Celestial Top", 72.0, 74.0, 72.0, 5.0, +0.7, "dual_source_split", "sine", 0.45),
+        ("bass", "Voz 1 - Sub Bass", 36.0, 38.0, 48.0, 1.5, 0.0, "single_source_width", "warm_saw", 0.35),
+        ("low", "Voz 2 - Low Harmony", 43.0, 45.0, 48.0, 2.0, -0.2, "single_source_width", "warm_saw", 0.32),
+        ("tenor", "Voz 3 - Tenor Pad", 48.0, 52.0, 60.0, 2.5, -0.4, "single_source_width", "flute", 0.28),
+        ("mid", "Voz 4 - Mid Pad", 55.0, 57.0, 60.0, 3.0, +0.4, "single_source_width", "flute", 0.28),
+        ("alto", "Voz 5 - Alto Voice", 59.0, 62.0, 60.0, 3.5, -0.6, "dual_source_split", "warm_saw", 0.25),
+        ("lead", "Voz 6 - Lush Lead", 64.0, 65.0, 60.0, 4.0, +0.6, "dual_source_split", "warm_saw", 0.25),
+        ("shimmer", "Voz 7 - Shimmer Air", 67.0, 71.0, 72.0, 4.5, -0.7, "dual_source_split", "triangle", 0.22),
+        ("top", "Voz 8 - Celestial Top", 72.0, 74.0, 72.0, 5.0, +0.7, "dual_source_split", "sine", 0.20),
     ]
     
     for vid, vname, p_start, p_mid, p_end, z_base, pan_base, wmode, wform, vol in pad_voices:

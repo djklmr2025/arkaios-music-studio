@@ -36,6 +36,9 @@ def validate_event(event, sr):
             value=getattr(n,key)
             if not np.isfinite(value) or not lo <= value <= hi:
                 raise ValueError(f'Invalid node {key}')
+        if hasattr(n, 'pitch') and n.pitch is not None:
+            if not np.isfinite(n.pitch) or not 0 <= n.pitch <= 127:
+                raise ValueError('Invalid node pitch')
         if n.t_offset <= last:
             raise ValueError('Node times must be strictly increasing')
         last=n.t_offset
@@ -82,7 +85,13 @@ def _position(sig, pan, sr):
 def render_spatial_event(event, sr=SAMPLE_RATE):
     validate_event(event,sr)
     n=int(event.duration*sr);t=np.arange(n)/sr
-    pitch=event.pitch_start+(event.pitch_end-event.pitch_start)*t/event.duration
+    has_node_pitches = event.nodes and any(getattr(n, 'pitch', None) is not None for n in event.nodes)
+    if has_node_pitches:
+        node_times = [n.t_offset for n in event.nodes]
+        node_pitches = [n.pitch if (hasattr(n, 'pitch') and n.pitch is not None) else (event.pitch_start + (event.pitch_end - event.pitch_start) * (n.t_offset / max(1e-6, event.duration))) for n in event.nodes]
+        pitch = np.interp(t, node_times, node_pitches)
+    else:
+        pitch = event.pitch_start + (event.pitch_end - event.pitch_start) * t / event.duration
     raw=generate_voice_signal(t,midi_to_freq(pitch),event.waveform,sr)
     env=np.ones(n);attack=min(int(.02*sr),n//4);release=min(int(.03*sr),n//4)
     if attack:env[:attack]=np.linspace(0,1,attack)
@@ -103,7 +112,9 @@ def render_spatial_event(event, sr=SAMPLE_RATE):
         stereo+=np.vstack((side,-side))
     z=(depth-1)/4
     for ch in range(2):stereo[ch]=_dynamic_lowpass(stereo[ch],3200+z*12800,sr)
-    stereo*=.85+.15*z
+    # Modelo acústico de atenuación por distancia 1/d (d_ref=1.0 frente, d_far=1.5 fondo)
+    dist=1.5-0.5*z
+    stereo*=(1.0/dist)*0.95
     if event.echo_enabled and event.echo_delay_ms>0 and event.echo_feedback>0:
         tail=int(.5*sr)
         weight=.40-.25*z
@@ -116,7 +127,7 @@ def render_project(project, sr=None):
     sr=project.sample_rate if sr is None else sr
     if not isinstance(sr,int) or not 8000<=sr<=192000:raise ValueError('Invalid sample_rate')
     for ev in project.events:validate_event(ev,sr)
-    n=int((max(project.total_duration(),.1)+.5)*sr)
+    n=int(max(project.total_duration(include_tail=True),.1)*sr)
     bus=np.zeros((2,n),dtype=np.float32)
     for ev in project.events:
         start=int(ev.time_start*sr);audio=render_spatial_event(ev,sr)
