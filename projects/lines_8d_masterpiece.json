@@ -1,0 +1,1937 @@
+{
+  "$schema": "https://arkaios.org/schemas/spatial-music-project.v1.json",
+  "name": "LINES 8D - Masterpiece (Arkaios Spatial Studio)",
+  "version": "1.0",
+  "bpm": 85.0,
+  "seed": 777,
+  "depth_planes": 5,
+  "sample_rate": 44100,
+  "events": [
+    {
+      "id": "pad_bass_a",
+      "name": "Voz 1 - Sub Bass (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 36.0,
+      "pitch_end": 38.0,
+      "volume": 0.75,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 1.5,
+          "pan": 0.0,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 2.0,
+          "pan": 0.0,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 1.5,
+          "pan": 0.0,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_low_a",
+      "name": "Voz 2 - Low Harmony (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 43.0,
+      "pitch_end": 45.0,
+      "volume": 0.65,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.0,
+          "pan": -0.2,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 2.5,
+          "pan": -0.24,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 2.0,
+          "pan": -0.2,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_tenor_a",
+      "name": "Voz 3 - Tenor Pad (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 48.0,
+      "pitch_end": 52.0,
+      "volume": 0.6,
+      "waveform": "flute",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.5,
+          "pan": -0.4,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 3.0,
+          "pan": -0.48,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 2.5,
+          "pan": -0.4,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_mid_a",
+      "name": "Voz 4 - Mid Pad (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 55.0,
+      "pitch_end": 57.0,
+      "volume": 0.6,
+      "waveform": "flute",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.0,
+          "pan": 0.4,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 3.5,
+          "pan": 0.48,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 3.0,
+          "pan": 0.4,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_alto_a",
+      "name": "Voz 5 - Alto Voice (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 59.0,
+      "pitch_end": 62.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "dual_source_split",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.5,
+          "pan": -0.6,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 4.0,
+          "pan": -0.72,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 3.5,
+          "pan": -0.6,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_lead_a",
+      "name": "Voz 6 - Lush Lead (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 64.0,
+      "pitch_end": 65.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "dual_source_split",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.0,
+          "pan": 0.6,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 4.5,
+          "pan": 0.72,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 4.0,
+          "pan": 0.6,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_shimmer_a",
+      "name": "Voz 7 - Shimmer Air (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 67.0,
+      "pitch_end": 71.0,
+      "volume": 0.5,
+      "waveform": "triangle",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "dual_source_split",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.5,
+          "pan": -0.7,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 5.0,
+          "pan": -0.84,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 4.5,
+          "pan": -0.7,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_top_a",
+      "name": "Voz 8 - Celestial Top (Sostenido)",
+      "time_start": 0.0,
+      "duration": 11.5,
+      "pitch_start": 72.0,
+      "pitch_end": 74.0,
+      "volume": 0.45,
+      "waveform": "sine",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "dual_source_split",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 5.0,
+          "pan": 0.7,
+          "width": 0.4
+        },
+        {
+          "t_offset": 6.0,
+          "depth": 5.0,
+          "pan": 0.84,
+          "width": 0.8
+        },
+        {
+          "t_offset": 11.5,
+          "depth": 5.0,
+          "pan": 0.7,
+          "width": 0.5
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 140.0,
+        "feedback": 0.22,
+        "damping_hz": 3200.0
+      }
+    },
+    {
+      "id": "pad_bass_conv",
+      "name": "Voz 1 - Sub Bass (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 38.0,
+      "pitch_end": 48.0,
+      "volume": 0.675,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 1.5,
+          "pan": 0.0,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": 0.0,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "pad_low_conv",
+      "name": "Voz 2 - Low Harmony (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 45.0,
+      "pitch_end": 48.0,
+      "volume": 0.585,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.0,
+          "pan": -0.2,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": -0.06,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "pad_tenor_conv",
+      "name": "Voz 3 - Tenor Pad (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 52.0,
+      "pitch_end": 60.0,
+      "volume": 0.54,
+      "waveform": "flute",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.5,
+          "pan": -0.4,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": -0.12,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "pad_mid_conv",
+      "name": "Voz 4 - Mid Pad (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 57.0,
+      "pitch_end": 60.0,
+      "volume": 0.54,
+      "waveform": "flute",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.0,
+          "pan": 0.4,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": 0.12,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "pad_alto_conv",
+      "name": "Voz 5 - Alto Voice (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 62.0,
+      "pitch_end": 60.0,
+      "volume": 0.495,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.5,
+          "pan": -0.6,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": -0.18,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "pad_lead_conv",
+      "name": "Voz 6 - Lush Lead (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 65.0,
+      "pitch_end": 60.0,
+      "volume": 0.495,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.0,
+          "pan": 0.6,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": 0.18,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "pad_shimmer_conv",
+      "name": "Voz 7 - Shimmer Air (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 71.0,
+      "pitch_end": 72.0,
+      "volume": 0.45,
+      "waveform": "triangle",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.5,
+          "pan": -0.7,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": -0.21,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "pad_top_conv",
+      "name": "Voz 8 - Celestial Top (Convergencia)",
+      "time_start": 11.5,
+      "duration": 3.5,
+      "pitch_start": 74.0,
+      "pitch_end": 72.0,
+      "volume": 0.405,
+      "waveform": "sine",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 5.0,
+          "pan": 0.7,
+          "width": 0.5
+        },
+        {
+          "t_offset": 2.5,
+          "depth": 4.5,
+          "pan": 0.21,
+          "width": 0.2
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 100.0,
+        "feedback": 0.25,
+        "damping_hz": 4000.0
+      }
+    },
+    {
+      "id": "arp_0_0",
+      "name": "Arpegio 60",
+      "time_start": 15.5,
+      "duration": 0.45,
+      "pitch_start": 60.0,
+      "pitch_end": 60.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.5,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_1",
+      "name": "Arpegio 62",
+      "time_start": 15.72,
+      "duration": 0.45,
+      "pitch_start": 62.0,
+      "pitch_end": 62.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.93,
+          "pan": 0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.43,
+          "pan": 0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_2",
+      "name": "Arpegio 64",
+      "time_start": 15.94,
+      "duration": 0.45,
+      "pitch_start": 64.0,
+      "pitch_end": 64.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.71,
+          "pan": 0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.21,
+          "pan": 0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_3",
+      "name": "Arpegio 67",
+      "time_start": 16.16,
+      "duration": 0.45,
+      "pitch_start": 67.0,
+      "pitch_end": 67.5,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.38,
+          "pan": 0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.88,
+          "pan": 0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_4",
+      "name": "Arpegio 69",
+      "time_start": 16.38,
+      "duration": 0.45,
+      "pitch_start": 69.0,
+      "pitch_end": 69.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.96,
+          "pan": 0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.46,
+          "pan": 0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_5",
+      "name": "Arpegio 72",
+      "time_start": 16.6,
+      "duration": 0.45,
+      "pitch_start": 72.0,
+      "pitch_end": 72.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.5,
+          "pan": 0.85,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.0,
+          "pan": 0.68,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_6",
+      "name": "Arpegio 74",
+      "time_start": 16.82,
+      "duration": 0.45,
+      "pitch_start": 74.0,
+      "pitch_end": 74.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.04,
+          "pan": 0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.54,
+          "pan": 0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_7",
+      "name": "Arpegio 76",
+      "time_start": 17.04,
+      "duration": 0.45,
+      "pitch_start": 76.0,
+      "pitch_end": 76.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.62,
+          "pan": 0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.12,
+          "pan": 0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_8",
+      "name": "Arpegio 79",
+      "time_start": 17.26,
+      "duration": 0.45,
+      "pitch_start": 79.0,
+      "pitch_end": 79.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.29,
+          "pan": 0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.79,
+          "pan": 0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_9",
+      "name": "Arpegio 81",
+      "time_start": 17.48,
+      "duration": 0.45,
+      "pitch_start": 81.0,
+      "pitch_end": 81.5,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.07,
+          "pan": 0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.57,
+          "pan": 0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_10",
+      "name": "Arpegio 84",
+      "time_start": 17.7,
+      "duration": 0.45,
+      "pitch_start": 84.0,
+      "pitch_end": 84.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.0,
+          "pan": 0.0,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.5,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_11",
+      "name": "Arpegio 81",
+      "time_start": 17.92,
+      "duration": 0.45,
+      "pitch_start": 81.0,
+      "pitch_end": 81.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.07,
+          "pan": -0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.57,
+          "pan": -0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_12",
+      "name": "Arpegio 79",
+      "time_start": 18.14,
+      "duration": 0.45,
+      "pitch_start": 79.0,
+      "pitch_end": 79.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.29,
+          "pan": -0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.79,
+          "pan": -0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_13",
+      "name": "Arpegio 76",
+      "time_start": 18.36,
+      "duration": 0.45,
+      "pitch_start": 76.0,
+      "pitch_end": 76.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.62,
+          "pan": -0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.12,
+          "pan": -0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_14",
+      "name": "Arpegio 74",
+      "time_start": 18.58,
+      "duration": 0.45,
+      "pitch_start": 74.0,
+      "pitch_end": 74.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.04,
+          "pan": -0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.54,
+          "pan": -0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_15",
+      "name": "Arpegio 72",
+      "time_start": 18.8,
+      "duration": 0.45,
+      "pitch_start": 72.0,
+      "pitch_end": 72.5,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.5,
+          "pan": -0.85,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.0,
+          "pan": -0.68,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_16",
+      "name": "Arpegio 69",
+      "time_start": 19.02,
+      "duration": 0.45,
+      "pitch_start": 69.0,
+      "pitch_end": 69.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.96,
+          "pan": -0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.46,
+          "pan": -0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_17",
+      "name": "Arpegio 67",
+      "time_start": 19.24,
+      "duration": 0.45,
+      "pitch_start": 67.0,
+      "pitch_end": 67.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.38,
+          "pan": -0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.88,
+          "pan": -0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_18",
+      "name": "Arpegio 64",
+      "time_start": 19.46,
+      "duration": 0.45,
+      "pitch_start": 64.0,
+      "pitch_end": 64.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.71,
+          "pan": -0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.21,
+          "pan": -0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_0_19",
+      "name": "Arpegio 62",
+      "time_start": 19.68,
+      "duration": 0.45,
+      "pitch_start": 62.0,
+      "pitch_end": 62.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.93,
+          "pan": -0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.43,
+          "pan": -0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_0",
+      "name": "Arpegio 60",
+      "time_start": 19.9,
+      "duration": 0.45,
+      "pitch_start": 60.0,
+      "pitch_end": 60.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.5,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_1",
+      "name": "Arpegio 62",
+      "time_start": 20.12,
+      "duration": 0.45,
+      "pitch_start": 62.0,
+      "pitch_end": 62.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.93,
+          "pan": 0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.43,
+          "pan": 0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_2",
+      "name": "Arpegio 64",
+      "time_start": 20.34,
+      "duration": 0.45,
+      "pitch_start": 64.0,
+      "pitch_end": 64.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.71,
+          "pan": 0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.21,
+          "pan": 0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_3",
+      "name": "Arpegio 67",
+      "time_start": 20.56,
+      "duration": 0.45,
+      "pitch_start": 67.0,
+      "pitch_end": 67.5,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.38,
+          "pan": 0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.88,
+          "pan": 0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_4",
+      "name": "Arpegio 69",
+      "time_start": 20.78,
+      "duration": 0.45,
+      "pitch_start": 69.0,
+      "pitch_end": 69.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.96,
+          "pan": 0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.46,
+          "pan": 0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_5",
+      "name": "Arpegio 72",
+      "time_start": 21.0,
+      "duration": 0.45,
+      "pitch_start": 72.0,
+      "pitch_end": 72.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.5,
+          "pan": 0.85,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.0,
+          "pan": 0.68,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_6",
+      "name": "Arpegio 74",
+      "time_start": 21.22,
+      "duration": 0.45,
+      "pitch_start": 74.0,
+      "pitch_end": 74.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.04,
+          "pan": 0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.54,
+          "pan": 0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_7",
+      "name": "Arpegio 76",
+      "time_start": 21.44,
+      "duration": 0.45,
+      "pitch_start": 76.0,
+      "pitch_end": 76.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.62,
+          "pan": 0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.12,
+          "pan": 0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_8",
+      "name": "Arpegio 79",
+      "time_start": 21.66,
+      "duration": 0.45,
+      "pitch_start": 79.0,
+      "pitch_end": 79.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.29,
+          "pan": 0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.79,
+          "pan": 0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_9",
+      "name": "Arpegio 81",
+      "time_start": 21.88,
+      "duration": 0.45,
+      "pitch_start": 81.0,
+      "pitch_end": 81.5,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.07,
+          "pan": 0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.57,
+          "pan": 0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_10",
+      "name": "Arpegio 84",
+      "time_start": 22.1,
+      "duration": 0.45,
+      "pitch_start": 84.0,
+      "pitch_end": 84.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.0,
+          "pan": 0.0,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.5,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_11",
+      "name": "Arpegio 81",
+      "time_start": 22.32,
+      "duration": 0.45,
+      "pitch_start": 81.0,
+      "pitch_end": 81.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.07,
+          "pan": -0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.57,
+          "pan": -0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_12",
+      "name": "Arpegio 79",
+      "time_start": 22.54,
+      "duration": 0.45,
+      "pitch_start": 79.0,
+      "pitch_end": 79.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.29,
+          "pan": -0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 1.79,
+          "pan": -0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_13",
+      "name": "Arpegio 76",
+      "time_start": 22.76,
+      "duration": 0.45,
+      "pitch_start": 76.0,
+      "pitch_end": 76.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 2.62,
+          "pan": -0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.12,
+          "pan": -0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_14",
+      "name": "Arpegio 74",
+      "time_start": 22.98,
+      "duration": 0.45,
+      "pitch_start": 74.0,
+      "pitch_end": 74.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.04,
+          "pan": -0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 2.54,
+          "pan": -0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_15",
+      "name": "Arpegio 72",
+      "time_start": 23.2,
+      "duration": 0.45,
+      "pitch_start": 72.0,
+      "pitch_end": 72.5,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.5,
+          "pan": -0.85,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.0,
+          "pan": -0.68,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_16",
+      "name": "Arpegio 69",
+      "time_start": 23.42,
+      "duration": 0.45,
+      "pitch_start": 69.0,
+      "pitch_end": 69.0,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 3.96,
+          "pan": -0.81,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.46,
+          "pan": -0.65,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 90.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_17",
+      "name": "Arpegio 67",
+      "time_start": 23.64,
+      "duration": 0.45,
+      "pitch_start": 67.0,
+      "pitch_end": 67.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.38,
+          "pan": -0.69,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 3.88,
+          "pan": -0.55,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 110.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_18",
+      "name": "Arpegio 64",
+      "time_start": 23.86,
+      "duration": 0.45,
+      "pitch_start": 64.0,
+      "pitch_end": 64.5,
+      "volume": 0.55,
+      "waveform": "warm_saw",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.71,
+          "pan": -0.5,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.21,
+          "pan": -0.4,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 130.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "arp_1_19",
+      "name": "Arpegio 62",
+      "time_start": 24.08,
+      "duration": 0.45,
+      "pitch_start": 62.0,
+      "pitch_end": 62.0,
+      "volume": 0.55,
+      "waveform": "triangle",
+      "trajectory_type": "single_source_width",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 4.93,
+          "pan": -0.26,
+          "width": 0.3
+        },
+        {
+          "t_offset": 0.45,
+          "depth": 4.43,
+          "pan": -0.21,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 150.0,
+        "feedback": 0.35,
+        "damping_hz": 4500.0
+      }
+    },
+    {
+      "id": "final_chord",
+      "name": "Acorde Final Resonante",
+      "time_start": 25.0,
+      "duration": 3.5,
+      "pitch_start": 60.0,
+      "pitch_end": 60.0,
+      "volume": 0.7,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "dual_source_split",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        },
+        {
+          "t_offset": 1.5,
+          "depth": 3.0,
+          "pan": 0.0,
+          "width": 1.0
+        },
+        {
+          "t_offset": 3.5,
+          "depth": 1.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 180.0,
+        "feedback": 0.4,
+        "damping_hz": 2800.0
+      }
+    }
+  ]
+}
