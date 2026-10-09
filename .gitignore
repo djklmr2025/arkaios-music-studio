@@ -14,3 +14,7 @@ output/
 Thumbs.db
 .DS_Store
 .vscode/
+
+# Variables de entorno y credenciales
+.env
+*.env
