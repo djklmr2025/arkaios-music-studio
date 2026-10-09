@@ -137,7 +137,12 @@ def run_tests():
         
         # 2. Renderizar audio por fuente
         audio_data, metrics = render_project(proj)
-        export_wav(wav_path, audio_data)
+        import numpy as np
+        assert not metrics['has_nan'], 'Nonfinite render'
+        assert not metrics['is_saturated'], 'Saturated render'
+        assert audio_data.shape == (2, int(metrics['duration_sec'] * metrics['sample_rate']))
+        assert np.isfinite(audio_data).all() and np.max(abs(audio_data)) <= .921
+        export_wav(wav_path, audio_data, metrics['sample_rate'])
         
         # 3. Guardar resultados
         results.append({
@@ -157,15 +162,47 @@ def run_tests():
         print(f"    - Saturación   : {'NO' if not metrics['is_saturated'] else 'ALERTA SATURADO'}")
 
     print("\n" + "=" * 70)
-    print("  EVALUACIÓN DE COMPARABILIDAD ACÚSTICA (Nivel Perceptual Parejo)")
+    print("  COMPARACIÓN DE NIVEL RMS (No acredita igualdad perceptual)")
     print("=" * 70)
     ref_rms = results[0]["metrics"]["rms_dbfs"]
     for r in results:
         diff_rms = r["metrics"]["rms_dbfs"] - ref_rms
         print(f"[*] {r['name']}: RMS {r['metrics']['rms_dbfs']} dBFS (Diferencia vs Referencia: {diff_rms:+.2f} dB)")
         
+    verify_regressions()
     print("\n[OK] Todas las 3 pruebas fueron generadas, renderizadas y validadas correctamente.")
     return results
 
+def verify_regressions():
+    import numpy as np
+    from engine.spatial_renderer import render_spatial_event, apply_echo_line
+    a, _ = render_project(build_test1_nota_fija())
+    b, _ = render_project(build_test2_fondo_al_frente())
+    assert np.linalg.norm(a-b)/np.linalg.norm(a) > .01, "Depth sweep must change audio"
+    for data in (a,b):
+        assert np.isfinite(data).all() and np.max(abs(data)) <= .921
+    p = build_test3_apertura_triangular()
+    p.events[0].echo_enabled = False
+    c, _ = render_project(p)
+    assert np.linalg.norm(c[0]-c[1])/np.linalg.norm(c[0]) > .01, "Split voices must differ"
+    ev = SpatialEvent(waveform="warm_saw", nodes=[SpatialNode(0,3,0,1),SpatialNode(1,3,0,1)])
+    wide = render_spatial_event(ev)
+    assert np.corrcoef(wide)[0,1] < .99, "Width must decorrelate stereo"
+    impulse = np.zeros(1000); impulse[0] = 1
+    echo = apply_echo_line(impulse,10,.2,3500)
+    assert np.all(echo[:441] == 0) and abs(echo[441]) > 0, "Echo must be causal"
+    assert np.max(abs(a[:,44100:])) > 0, "Echo tail must continue after note"
+    tone = render_spatial_event(SpatialEvent(pitch_start=69,pitch_end=69),sr=48000)[0]
+    freq = np.fft.rfftfreq(len(tone),1/48000)[np.argmax(abs(np.fft.rfft(tone)))]
+    assert abs(freq-440) <= 1, "Sample rate must preserve pitch"
+    for invalid in (SpatialEvent(duration=-1), SpatialEvent(nodes=[SpatialNode(depth=99)]),
+                    SpatialEvent(volume=float('nan')),
+                    SpatialEvent(nodes=[SpatialNode(.5),SpatialNode(.1)])):
+        try: render_spatial_event(invalid)
+        except ValueError: pass
+        else: raise AssertionError("Invalid event accepted")
+    print("[OK] Regresiones: profundidad, anchura, voces, eco, cola, frecuencia y validacion")
+
 if __name__ == "__main__":
     run_tests()
+

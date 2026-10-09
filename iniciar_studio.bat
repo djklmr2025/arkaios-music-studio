@@ -1,28 +1,20 @@
 @echo off
-title ARKAIOS Spatial Music Studio (5 Planos 3D - Windows 11)
+setlocal
+title ARKAIOS Spatial Music Studio
 chcp 65001 >nul
 cd /d "%~dp0"
-
-echo ======================================================================
-echo   ARKAIOS SPATIAL MUSIC STUDIO - LANZADOR WINDOWS 11
-echo ======================================================================
-echo.
-
-set PYTHON_EXE=C:\ARKAIOS\.venv\Scripts\python.exe
-
-if not exist "%PYTHON_EXE%" (
-    echo [ERROR] No se encontro el entorno Python en C:\ARKAIOS\.venv\Scripts\python.exe
-    echo Por favor instala Python o verifica la ruta.
-    pause
-    exit /b 1
+if not exist ".venv\Scripts\python.exe" (
+    py -3 -m venv .venv
+    if errorlevel 1 goto error
 )
-
-echo [*] Verificando batera de pruebas de ingeniera acstica...
-"%PYTHON_EXE%" tests_run.py
-
-echo.
-echo [*] Iniciando interfaz interactiva de 5 planos (GUI)...
-start "" "%PYTHON_EXE%" gui_studio.py
-
-echo [OK] Estudio espacial iniciado con exito.
+".venv\Scripts\python.exe" -m pip install -r requirements.txt
+if errorlevel 1 goto error
+".venv\Scripts\python.exe" tests_run.py
+if errorlevel 1 goto error
+".venv\Scripts\python.exe" gui_studio.py
+if errorlevel 1 goto error
 exit /b 0
+:error
+echo [ERROR] No se pudo iniciar. Instala Python 3 con el lanzador py y revisa el mensaje anterior.
+pause
+exit /b 1

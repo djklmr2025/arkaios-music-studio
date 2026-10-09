@@ -11,8 +11,6 @@ if sys.stdout.encoding != 'utf-8':
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import argparse
-from engine.composer import generate_lines_progression
-from engine.synth import render_score_to_audio
 from engine.spatializer_8d import process_8d, save_wav_file, load_audio_file, convert_to_8d
 import subprocess
 
@@ -39,9 +37,22 @@ def main():
     spat_parser.add_argument("--period", type=float, default=9.0, help="Periodo orbital en segundos (default: 9.0s)")
     spat_parser.add_argument("--radius", type=float, default=0.9, help="Intensidad de separación (0.1 a 1.0)")
     
+    render_parser = subparsers.add_parser("render", help="Renderizar proyecto espacial JSON")
+    render_parser.add_argument("--project", required=True)
+    render_parser.add_argument("--output", required=True)
     args = parser.parse_args()
+    if args.command == "render":
+        from engine.spatial_model import SpatialProject
+        from engine.spatial_renderer import render_project, export_wav
+        project = SpatialProject.load_json(args.project)
+        audio, metrics = render_project(project)
+        export_wav(args.output, audio, metrics["sample_rate"])
+        print(metrics)
+        return
     
     if args.command == "compose":
+        from engine.composer import generate_lines_progression
+        from engine.synth import render_score_to_audio
         print(f"\n==================================================")
         print(f"  ARKAIOS AUTONOMOUS MUSIC STUDIO - COMPOSER")
         print(f"==================================================")
@@ -89,3 +100,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

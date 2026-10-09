@@ -336,7 +336,7 @@ class SpatialStudioApp:
         
         temp_wav = os.path.join(OUTPUT_DIR, "live_preview.wav")
         audio_data, metrics = render_project(self.current_project)
-        export_wav(temp_wav, audio_data)
+        export_wav(temp_wav, audio_data, metrics["sample_rate"])
         self.current_wav_path = temp_wav
         self._update_metrics_display()
         
@@ -397,3 +397,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
