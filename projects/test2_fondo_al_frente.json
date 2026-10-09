@@ -1,0 +1,49 @@
+{
+  "$schema": "https://arkaios.org/schemas/spatial-music-project.v1.json",
+  "name": "Prueba 2 - Fondo al Frente",
+  "version": "1.0",
+  "bpm": 80.0,
+  "seed": 102,
+  "depth_planes": 5,
+  "sample_rate": 44100,
+  "events": [
+    {
+      "id": "ev_profundidad",
+      "name": "Viaje Fondo a Frente C4",
+      "time_start": 0.0,
+      "duration": 1.0,
+      "pitch_start": 60.0,
+      "pitch_end": 60.0,
+      "volume": 0.8,
+      "waveform": "warm_saw",
+      "trajectory_type": "depth_sweep",
+      "width_mode": "single_source_width",
+      "nodes": [
+        {
+          "t_offset": 0.0,
+          "depth": 1.0,
+          "pan": 0.0,
+          "width": 0.0
+        },
+        {
+          "t_offset": 0.5,
+          "depth": 3.0,
+          "pan": 0.0,
+          "width": 0.0
+        },
+        {
+          "t_offset": 1.0,
+          "depth": 5.0,
+          "pan": 0.0,
+          "width": 0.0
+        }
+      ],
+      "echoes": {
+        "enabled": true,
+        "delay_ms": 80.0,
+        "feedback": 0.2,
+        "damping_hz": 3500.0
+      }
+    }
+  ]
+}

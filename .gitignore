@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Audio renders y binarios locales
+output/
+
+# Sistema y logs
+*.log
+Thumbs.db
+.DS_Store
+.vscode/
