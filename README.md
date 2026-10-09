@@ -192,3 +192,37 @@ Se ejecutaron las tres pruebas y comprobaciones de profundidad, anchura, separac
 La interfaz Tkinter/winsound y el lanzador deben verificarse en Windows 11; no se han ejecutado en este entorno Linux. Hay reproducción y parada, pero todavía no pausa. La GUI edita principalmente el primer evento y no es aún un secuenciador multipista completo. `trajectory_type` es una etiqueta: el movimiento lo definen los nodos y su interpolación lineal; no hay generador de curvas circulares o Bézier. No hay elevación acústica, HRTF medida, salida háptica ni garantía de localización frontal/posterior. `seed` se conserva como metadato en proyectos espaciales, sin generación aleatoria asociada. El sintetizador antiguo y su MIDI requieren una auditoría adicional; estas correcciones corresponden al motor por objetos.
 
 GitHub Actions puede fallar por condiciones de la cuenta o infraestructura antes de ejecutar pasos. Un workflow publicado no demuestra que una ejecución haya pasado. `.gitignore` no elimina secretos ya versionados y no prueba el estado del `.env` de una computadora.
+
+---
+
+## Actualización de Validación en Windows 11 (Gemini) - 08/10/2026
+
+### Qué cambió
+1. **`iniciar_studio.bat`**: Detección inteligente y tolerante a fallos de Python 3.10+ en Windows 11. Se evalúa `py -3`, luego `python` en `%PATH%` (filtrando stubs del Microsoft Store), y finalmente rutas directas estándar (`C:\Python314\python.exe`, `C:\Python313\python.exe`, `%LOCALAPPDATA%\Programs\Python\...`, `%ProgramFiles%\Python...`).
+2. **`gui_studio.py`**: En `render_and_export_wav`, se pasa explícitamente `metrics["sample_rate"]` a `export_wav` para garantizar consistencia con proyectos a 48 kHz u otras frecuencias de muestreo.
+
+### Por qué
+1. En Windows 11, el comando `py` falló con `"py" no se reconoce como un comando interno o externo...` debido a que el lanzador opcional `py.exe` no siempre está en el `%PATH%` cuando Python se instala en directorios como `C:\Python314`. La búsqueda directa asegura que cualquier usuario en Windows 11 pueda arrancar el estudio con un doble clic sin configuraciones manuales.
+2. La exportación manual desde la GUI mantenía el `sample_rate` estático de 44.1 kHz, ignorando si el proyecto requería 48 kHz.
+
+### Pruebas ejecutadas
+1. **Lanzador**: Ejecución de `iniciar_studio.bat` con validación de detección de intérprete y paso de dependencias.
+2. **Entorno y Dependencias**: Instalación correcta de `requirements.txt` (`numpy 2.5.3`, `scipy 1.18.1`, `mido 1.3.3`) en `.venv`.
+3. **Batería de Pruebas Acústicas**: `.venv\Scripts\python.exe tests_run.py` ejecutado al 100% de éxito:
+   - Prueba 1 (Nota Fija): Peak -8.65 dBFS, RMS -18.49 dBFS, 0 NaNs, Sin Saturación.
+   - Prueba 2 (Fondo a Frente): Peak -8.62 dBFS, RMS -18.75 dBFS, 0 NaNs, Sin Saturación.
+   - Prueba 3 (Apertura Triangular): Peak -8.95 dBFS, RMS -20.48 dBFS, 0 NaNs, Sin Saturación.
+   - Regresiones verificadas: variación dinámica de profundidad, separación de voces duales, descorrelación estéreo, causalidad de eco (retardo > 0), persistencia de cola audible, preservación de frecuencia a 48 kHz y rechazo de eventos inválidos.
+4. **Comando de Renderizado CLI**:
+   `.venv\Scripts\python.exe studio.py render --project projects/test2_fondo_al_frente.json --output output/prueba_windows.wav`
+   Completado con éxito (duración 1.5s, 264.644 bytes generados).
+5. **Auditoría de GUI**:
+   Pruebas de ciclo de vida completas: carga de los 3 presets, movimiento de nodos amarillos (profundidad/paneo), alteración de tono y volumen, reproducción asíncrona y parada vía `winsound`, guardado de JSON, reapertura con conservación de cambios y exportación a WAV.
+6. **Auditoría de GitHub Actions para commit `5d85b02`**:
+   Se consultó la API de GitHub Actions (Run `37880839401`). El fallo se identificó como **problema de infraestructura/cuenta**, no de código: `"The job was not started because your account is locked due to a billing issue."`.
+
+### Qué sigue pendiente
+1. **Evaluación Perceptual Humana**: Se requiere escucha crítica binaural con auriculares por parte del usuario para validar si el gradiente de filtrado y retardo se percibe de forma convincente como profundidad tridimensional.
+2. **Función de Pausa en Transporte**: Actualmente la GUI implementa Reproducir (`winsound.PlaySound`) y Detener (`winsound.SND_PURGE`); `winsound` nativo no soporta pausa/reanudación sin librerías externas de audio (p.ej. `sounddevice` o `pygame`).
+3. **Editor Multipista**: La GUI edita el evento principal (evento 0) del proyecto.
+
