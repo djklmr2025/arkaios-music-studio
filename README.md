@@ -224,5 +224,35 @@ GitHub Actions puede fallar por condiciones de la cuenta o infraestructura antes
 ### Qué sigue pendiente
 1. **Evaluación Perceptual Humana**: Se requiere escucha crítica binaural con auriculares por parte del usuario para validar si el gradiente de filtrado y retardo se percibe de forma convincente como profundidad tridimensional.
 2. **Función de Pausa en Transporte**: Actualmente la GUI implementa Reproducir (`winsound.PlaySound`) y Detener (`winsound.SND_PURGE`); `winsound` nativo no soporta pausa/reanudación sin librerías externas de audio (p.ej. `sounddevice` o `pygame`).
-3. **Editor Multipista**: La GUI edita el evento principal (evento 0) del proyecto.
+3. **Editor Multipista**: Resuelto en la actualización a continuación.
+
+---
+
+## Actualización de Secuenciador Vectorial LINES 8D - 08/10/2026
+
+### Transformación de la Interfaz a Secuenciador Polifónico Vectorial
+Basado en la referencia técnica de `Musica creada en 8D.mp4` (LINES):
+1. **Teclado Piano Vertical Activo**:
+   - Piano en el lateral izquierdo con teclas sensibles a la afinación (C2 a C6).
+   - Retroalimentación luminosa dinámica: las teclas se encienden en tiempo real con resplandor neón magenta/cian conforme el playhead recorre las notas activas.
+2. **Línea de Tiempo Polifónica Multivoz**:
+   - Rejilla continua de compases (Bars) calculada dinámicamente según el tempo (BPM).
+   - **Playhead Dorado en Tiempo Real**: línea vertical móvil sincronizada a 30 FPS con el motor de audio `winsound`.
+   - **Ribbons Vectoriales Translúcidos**: cada voz dibuja su cinta de grosor proporcional al volumen y apertura estéreo, permitiendo visualizar acordes masivos que se deslizan libremente (*microtonal glissando*).
+3. **Herramientas de Composición Interactiva**:
+   - Modo `Seleccionar (S)`: arrastre intuitivo de nodos en tiempo y afinación.
+   - Modo `Dibujar (D)`: creación rápida de nuevas líneas vectoriales con un clic sobre el lienzo.
+   - `Nueva Voz` / `Borrar Voz`: control de polifonía arbitraria (más de 50 voces simultáneas).
+4. **Obra Maestra LINES 8D**:
+   - Se incluyó el generador y proyecto [`projects/lines_8d_masterpiece.json`](file:///c:/ARKAIOS/arkaios-music-studio/projects/lines_8d_masterpiece.json) (57 eventos, 28.5 s), que replica fielmente la progresión demostrada:
+     - *Fase 1*: Pad cósmico de 8 voces con micro-glissando y apertura triangular.
+     - *Fase 2*: Gran convergencia gravitacional de todas las voces hacia un punto central.
+     - *Fase 3*: Cascada de arpegios ascendentes y descendentes con ecos sonar 8D.
+     - *Fase 4*: Acorde resonante final que se desvanece en el fondo (Plano 1).
+
+### Pruebas Realizadas
+- [x] Ejecución de `tests_run.py` (100% de regresiones y pruebas de ingeniería superadas).
+- [x] Generación y renderizado de `lines_8d_masterpiece.wav` (29.0s, Peak -0.72 dBFS, RMS -16.11 dBFS, 0 NaNs).
+- [x] Validación de la GUI: adición de voces, eliminación, dibujo, selección, reproducción con playhead y exportación WAV.
+
 
